@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Campus Drive+</title>
+    <%= stylesheet_link_tag    'application' %>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid navigation">
+      <div class="navbar-header">
+          <ul class="nav navbar-nav">
+            <li class="<%= params[:action] == 'live' ? 'active' : '' %>"><%= link_to 'HOME', live_deals_path %></li>
+            <li class="<%= params[:controller] == 'admins' ? 'active' : '' %>"><%= link_to 'ADMINS', admins_path %></li>
+            <li class="<%= params[:controller] == 'deals' ? 'active' : '' %>"><%= link_to 'DEALS', deals_path %></li>
+            <li class="<%= params[:controller] == 'users' ? 'active' : '' %>"><%= link_to 'USERS', users_path %></li>
+          </ul>
+        </div>
+        <div class="navbar-right">
+            <%= form_tag '/login' do %>
+              <%= select_tag "user_id", options_from_collection_for_select(User.all, "id", "name", current_user.try(:id)), include_blank: true, class: 'dropdown pull-right' %>
+              <%= submit_tag 'Select' %>
+            <% end -%>
+        </div>
+      </div>
+    </nav>
+    <div class='container'>
+      <%= render partial: 'notice' %>
+      <%= yield %>
+    </div>
+  </body>
+</html>

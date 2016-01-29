@@ -1,0 +1,2 @@
+$('#status').html('Enabled')
+$('[data-id="<%= @admin.id %>"]').html('<%= j link_to "Disable", disable_admin_path(@admin), data: { confirm: "Are you sure you want to disable #{ @admin.first_name }?" }, class: "btn btn-xs btn-danger", remote: true %>');

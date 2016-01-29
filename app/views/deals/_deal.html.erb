@@ -1,0 +1,14 @@
+<tr>
+  <td><%= deal.title %></td>
+  <td><%= deal.description %></td>
+  <td><%= deal.price %></td>
+  <td><%= deal.discounted_price %></td>
+  <td><%= deal.quantity %></td>
+  <td><%= deal.publish_date %></td>
+  <td><%= deal.publishable %></td>
+  <td><%= deal.live %></td>
+  <td>
+      <%= link_to 'Edit', edit_deal_path(deal) %> |
+      <%= link_to 'Delete', deal, method: :delete, data: { confirm: "Are you sure you want to delete #{ deal.title }?" } unless deal == current_user %>
+  </td>
+</tr>

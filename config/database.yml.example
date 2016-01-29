@@ -1,0 +1,18 @@
+default:
+  adapter:
+  pool:
+  timeout:
+
+development:
+  <<: *default
+  encoding:
+  reconnect:
+  database:
+  username:
+  password:
+  host:
+  database:
+
+production:
+  <<: *default
+  database:

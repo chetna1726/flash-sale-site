@@ -1,0 +1,8 @@
+<% if flash[:alert] %>
+  <p id="alert" class="alert alert-info"><%= flash[:alert] %></p>
+<% elsif flash[:notice] -%>
+  <p id="notice" class="alert alert-success"><%= flash[:notice] %></p>
+<% elsif flash[:error] -%>
+  <p id="error" class="alert alert-danger"><%= flash[:error] %></p>
+<% end -%>
+<% flash.clear %>
