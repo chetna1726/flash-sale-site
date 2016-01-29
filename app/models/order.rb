@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
 
   before_validation :check_deal_availability, :set_discount, :set_sale_price, on: :create, if: ->{ user && deal }
-  after_save :update_deal, on: :create
+  before_save :update_deal, on: :create
 
   belongs_to :user, counter_cache: true
   belongs_to :deal, autosave: true
