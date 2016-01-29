@@ -13,7 +13,7 @@
           <ul class="nav navbar-nav">
             <li class="<%= params[:action] == 'live' ? 'active' : '' %>"><%= link_to 'HOME', live_deals_path %></li>
             <li class="<%= params[:controller] == 'admins' ? 'active' : '' %>"><%= link_to 'ADMINS', admins_path %></li>
-            <li class="<%= params[:controller] == 'deals' ? 'active' : '' %>"><%= link_to 'DEALS', deals_path %></li>
+            <li class="<%= params[:controller] == 'deals' && params[:action] != 'live' ? 'active' : '' %>"><%= link_to 'DEALS', deals_path %></li>
             <li class="<%= params[:controller] == 'users' ? 'active' : '' %>"><%= link_to 'USERS', users_path %></li>
           </ul>
         </div>

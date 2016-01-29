@@ -1,10 +1,10 @@
 class Order < ActiveRecord::Base
 
   before_validation :check_deal_availability, :set_discount, :set_sale_price, on: :create, if: ->{ user && deal }
-  after_commit :update_deal, on: :create
+  after_save :update_deal, on: :create
 
   belongs_to :user, counter_cache: true
-  belongs_to :deal
+  belongs_to :deal, autosave: true
 
   validates :user, :deal, presence: true
   validates :discount, :sale_price, presence: true, if: ->{ user && deal }
@@ -17,7 +17,8 @@ class Order < ActiveRecord::Base
   private
 
     def update_deal
-      self.deal.decrement!(:quantity)
+      debugger
+      self.deal.quantity = deal.quantity - 1
     end
 
     def set_discount

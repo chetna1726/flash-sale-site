@@ -1,7 +1,6 @@
 class DealsController < ApplicationController
   before_action :set_deal, only: [:show, :edit, :update, :destroy]
 
-
   def index
     @deals = Deal.all.order(:title)
     flash[:error] = @deals.empty? ? 'No records to display!' : nil
