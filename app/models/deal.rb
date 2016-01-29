@@ -1,7 +1,7 @@
 class Deal < ActiveRecord::Base
 
   before_destroy :check_destroyablity
-  before_save :check_publishability
+  before_save :check_publishability,if: ->{ live }
 
   has_many :orders, inverse_of: :deal, dependent: :restrict_with_error
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }
@@ -15,14 +15,16 @@ class Deal < ActiveRecord::Base
                                     greater_than: :discounted_price,
                                     message: 'Price must be greater than Discounted Price.'
                                   }, if: ->{ price? && discounted_price? }
+    deal.validates :publish_date, uniqueness: { scope: :live }, allow_blank: true, if: -> { live }
   end
 
-  with_options if: ->{ live } do |deal|
-    validates :publishable, acceptance: { accept: true, message: 'required to publish!' }, if: -> { live }
-    validates :publish_date, uniqueness: true, allow_blank: true, if: -> { live }
-  end
+  validates :publishable, acceptance: { accept: true, message: 'required to publish!' }, if: -> { live }
 
-  scope :live_deal, ->{ where(live: true) }
+  scope :live_deals, ->{ where(live: true) }
+
+  scope :publishable_deals, ->{ where(publishable: true) }
+
+  scope :publishable_deals_for_today, ->{ where(publishable: true, publish_date: Date.current) }
 
   def make_live
     self.update_column(:live, true) if self
@@ -38,16 +40,14 @@ class Deal < ActiveRecord::Base
     end
 
     def check_publishability
-      if live
-        if Deal.live_deal.many? || publish_date != Date.current
-          errors.add(:base, 'Cannot publish deal!')
-          false
-        end
+      if Deal.live_deals.many? || publish_date != Date.current
+        errors.add(:base, 'Cannot publish deal!')
+        false
       end
     end
 
     def self.unpublish_old_deal
-      old_deal = Deal.live_deal.first
+      old_deal = Deal.live_deals.first
       old_deal.update_column(:live, false) if old_deal
     end
 
