@@ -14,7 +14,6 @@
           <th>Publish Date</th>
           <th>Publishable</th>
           <th>Live</th>
-          <th>Actions</th>
         </thead>
         <tbody>
           <tr>
@@ -26,22 +25,20 @@
             <td><%= @deal.publish_date %></td>
             <td><%= @deal.publishable %></td>
             <td><%= @deal.live %></td>
-            <td>
-                <%= link_to 'Edit', edit_deal_path(@deal) %> |
-                <%= link_to 'Delete', @deal, method: :delete, data: { confirm: "Are you sure you want to delete #{ @deal.title }?" } %>
-            </td>
           </tr>
         </tbody>
       </table>
-      <% if current_user.orders_count > 0 %>
-        <h3>
-          <div class="label label-info">You have an additional <%= current_user.orders_count %>% discount!</div>
-        </h3>
-        <h4>
-          New Sale Price: <%= @deal.discounted_price - @deal.discounted_price * current_user.orders_count / 100 %>
-        </h4>
+      <% if current_user.is_a? User %>
+        <% if current_user.orders_count > 0 %>
+          <h3>
+            <div class="label label-info">You have an additional <%= current_user.orders_count %>% discount!</div>
+          </h3>
+          <h4>
+            New Sale Price: <%= @deal.discounted_price - @deal.discounted_price * current_user.orders_count / 100 %>
+          </h4>
+        <% end -%>
+        <%= link_to 'BUY', orders_path(deal_id: @deal.id), method: :post, class: 'btn btn-success'  %>
+      </div>
       <% end -%>
-      <%= link_to 'BUY', orders_path(deal_id: @deal.id), method: :post, class: 'btn btn-success'  %>
-    </div>
-  <% end -%>
+    <% end -%>
 </div>

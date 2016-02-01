@@ -1,6 +1,6 @@
 class Order < ActiveRecord::Base
 
-  before_validation :check_deal_availability, :set_discount, :set_sale_price, on: :create, if: ->{ user && deal }
+  before_validation :set_discount, :set_sale_price, on: :create, if: ->{ user && deal }
   before_save :update_deal, on: :create
 
   belongs_to :user, counter_cache: true
@@ -13,11 +13,11 @@ class Order < ActiveRecord::Base
                                         less_than_or_equal_to: 5
                                      }, allow_blank: true
   validates :deal, uniqueness: { scope: :user, message: 'can only be purchased once!' }
+  validate :check_deal_availability, if: ->{ user && deal }
 
   private
 
     def update_deal
-      debugger
       self.deal.quantity = deal.quantity - 1
     end
 
@@ -32,7 +32,6 @@ class Order < ActiveRecord::Base
     def check_deal_availability
       unless deal.live && deal.publishable && deal.quantity > 0
         errors.add(:base, 'Deal cannot be purchased!')
-        false
       end
     end
 end

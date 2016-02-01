@@ -1,7 +1,7 @@
 class Deal < ActiveRecord::Base
 
   before_destroy :check_destroyablity
-  before_save :check_publishability,if: ->{ live }
+  before_save :check_publishability, if: ->{ live }
 
   has_many :orders, inverse_of: :deal, dependent: :restrict_with_error
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }
@@ -27,7 +27,7 @@ class Deal < ActiveRecord::Base
   scope :publishable_deals_for_today, ->{ where(publishable: true, publish_date: Date.current) }
 
   def make_live
-    self.update_column(:live, true) if self
+    self.update_column(:live, true)
   end
 
   private

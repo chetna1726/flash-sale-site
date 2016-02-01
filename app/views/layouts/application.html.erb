@@ -11,15 +11,20 @@
       <div class="container-fluid navigation">
       <div class="navbar-header">
           <ul class="nav navbar-nav">
-            <li class="<%= params[:action] == 'live' ? 'active' : '' %>"><%= link_to 'HOME', live_deals_path %></li>
-            <li class="<%= params[:controller] == 'admins' ? 'active' : '' %>"><%= link_to 'ADMINS', admins_path %></li>
-            <li class="<%= params[:controller] == 'deals' && params[:action] != 'live' ? 'active' : '' %>"><%= link_to 'DEALS', deals_path %></li>
+            <% if current_user %>
+              <li class="<%= params[:action] == 'live' ? 'active' : '' %>"><%= link_to 'HOME', live_deals_path %></li>
+              <% if current_user.is_a? Admin %>
+                <li class="<%= params[:controller] == 'admins' ? 'active' : '' %>"><%= link_to 'ADMINS', admins_path %></li>
+              <% end -%>
+              <li class="<%= params[:controller] == 'deals' && params[:action] != 'live' ? 'active' : '' %>"><%= link_to 'DEALS', deals_path %></li>
+            <% end -%>
             <li class="<%= params[:controller] == 'users' ? 'active' : '' %>"><%= link_to 'USERS', users_path %></li>
           </ul>
         </div>
         <div class="navbar-right">
             <%= form_tag '/login' do %>
-              <%= select_tag "user_id", options_from_collection_for_select(User.all, "id", "name", current_user.try(:id)), include_blank: true, class: 'dropdown pull-right' %>
+              <%= select_tag "admin_id", options_from_collection_for_select(Admin.all, "id", "name", current_user.try(:id)), prompt: 'Select Admin', class: 'dropdown pull-right' %>
+              <%= select_tag "user_id", options_from_collection_for_select(User.all, "id", "name", current_user.try(:id)), prompt: 'Select User', class: 'dropdown pull-right' %>
               <%= submit_tag 'Select' %>
             <% end -%>
         </div>

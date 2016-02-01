@@ -7,8 +7,10 @@
   <td><%= deal.publish_date %></td>
   <td><%= deal.publishable %></td>
   <td><%= deal.live %></td>
-  <td>
-      <%= link_to 'Edit', edit_deal_path(deal) %> |
-      <%= link_to 'Delete', deal, method: :delete, data: { confirm: "Are you sure you want to delete #{ deal.title }?" } unless deal == current_user %>
-  </td>
+  <% if current_user.is_a? Admin %>
+    <td>
+        <%= link_to 'Edit', edit_deal_path(deal) %> |
+        <%= link_to 'Delete', deal, method: :delete, data: { confirm: "Are you sure you want to delete #{ deal.title }?" } unless deal == current_user %>
+    </td>
+  <% end -%>
 </tr>

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <h1 class="main-heading panel-heading col-sm-5">Listing users</h1>
-    <%= link_to 'New user', new_user_path, class: "pull-right btn btn-primary" %>
+    <%= link_to 'New user', new_user_path, class: "pull-right btn btn-primary"  if current_user.is_a? Admin %>
   </div>
 
   <% unless @users.empty? %>
